@@ -63,8 +63,8 @@ using user *catalog* and database *catalogdb*:
 
 ##Accessing the server
 - The ubuntu server hosting the application ip address is **52.35.167.125**, and ssh service
-is running on port **2200**. To login, execute:
- ssh -i <private key> grader@52.35.167.125 -p 2200
+is running on port **2200**. To login, execute: 
+`ssh -i <private key> grader@52.35.167.125 -p 2200`
 
 ##Running the application
 - access the URL http://ec2-52-35-167-125.us-west-2.compute.amazonaws.com/ , and all functionality
@@ -90,3 +90,9 @@ running the application locally, did not work here, maybe some apacke+wsgi scopi
 Probably `SQLAlchemy` is not using the table name in quotes, which would work, per the link above.
 
 To solve the issue, I renamed the table as *catalog_user* instead, and recreated the schema. 
+
+##Next steps
+
+- To setup automatic upgrades, package `unattended-upgrades` ([here](https://wiki.debian.org/UnattendedUpgrades)) looks interesting.
+- To protect against multiple failed logins, package `fail2ban` is the one.
+- To monitor the application, go with `glances`! 

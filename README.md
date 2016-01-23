@@ -18,9 +18,8 @@ ports 2200 (SSH), 80 (HTTP) and 123 (NTP)
 - disabled root login
 
 ##Web server configuration
-- apache and mod_wsgi installed using apt-get, to make the server handle
+- `apache` and `mod_wsgi` installed using `apt-get`, to make the server host
 web applications
-- wsgi 
 
 ##Database configuration
 - postgresql installed using apt-get, so that the web applications above
@@ -68,4 +67,26 @@ is running on port **2200**. To login, execute:
  ssh -i <private key> grader@52.35.167.125 -p 2200
 
 ##Running the application
-- access the 
+- access the URL http://ec2-52-35-167-125.us-west-2.compute.amazonaws.com/ , and all functionality
+from the Restaurant Catalog app ([here!](https://github.com/thiagos/RestaurantCatalogApp)) is 
+available.
+
+##Issues faced
+- The login page was not opening, due to the following error: 
+`RuntimeError: the session is unavailable because no secret key was set. Set the 
+secret_key on the application to something unique and secret.`
+
+Even though this was being set as `app.secret_key = 'some key'`
+
+After some research, the change that fixed the problem was to set it directly in the `app`
+config attribute: `app.config['SECRET_KEY'] = 'some key'`
+
+I could not find the exact same problem or explanation why the first line, which worked when
+running the application locally, did not work here, maybe some apacke+wsgi scoping issue.
+
+- My database_setup had a table called 'user', which is a reserved word in postgresql (reference
+[here](http://stackoverflow.com/questions/22256124/cannot-create-a-database-table-named-user-in-postgresql)).
+
+Probably `SQLAlchemy` is not using the table name in quotes, which would work, per the link above.
+
+To solve the issue, I renamed the table as *catalog_user* instead, and recreated the schema. 
